@@ -70,6 +70,20 @@ app.post("/workexperience", async (req, res) => {
   }
 });
 
+//Delete baserat på ID
+app.delete("/workexperiences/:id", async (req, res) => {
+  try {
+    const id = req.params.id; //Hämtar id från URL
+    const result = await WorkExperience.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).json({ error: "Hittade inget jobb med det ID:t" });
+    }
+    return res.json({ message: "Jobbet har raderats!" });
+  } catch (error) {
+    return res.status(500).json({ error: "Kunde inte radera: " + error });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servern körs på port ${PORT}`);
 });
