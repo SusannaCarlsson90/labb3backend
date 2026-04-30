@@ -61,12 +61,31 @@ app.get("/workexperiences", async (req, res) => {
   }
 });
 
-app.post("/workexperience", async (req, res) => {
+app.post("/workexperiences", async (req, res) => {
   try {
     let result = await WorkExperience.create(req.body);
     return res.json(result);
   } catch (error) {
     return res.status(400).json(error);
+  }
+});
+
+app.put("/workexperiences/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updatedData = req.body;
+    const result = await WorkExperience.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+
+    if (!result) {
+      return res
+        .status(404)
+        .json({ message: "Hittade inget jobb med det ID:t" });
+    }
+    return res.json({ message: "Uppdatering lyckades!", result });
+  } catch (error) {
+    return res.status(500).json(error);
   }
 });
 
